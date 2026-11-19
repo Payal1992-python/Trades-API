@@ -17,6 +17,7 @@ stage('Check Environment') {
             pwd
             git --version
             java -version
+            docker --version
             which python
             which python3
             which docker
