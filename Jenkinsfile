@@ -8,10 +8,21 @@ pipeline {
             }
         }
 
-        stage('Python Version') {
-            steps {
-                sh 'python3 --version'
-            }
-        }
+        
+stage('Check Environment') {
+    steps {
+        sh '''
+            echo "Checking available tools"
+            whoami
+            pwd
+            git --version
+            java -version
+            which python
+            which python3
+            which docker
+        '''
+    }
+}
+
     }
 }
