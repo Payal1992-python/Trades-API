@@ -1,28 +1,22 @@
 pipeline {
     agent any
 
+    environment {
+        PY = 'C:\\Users\\lenovo\\AppData\\Local\\Programs\\Python\\Python313\\python.exe'
+    }
+
     stages {
-        stage('Checkout') {
+        stage('Check Python') {
+            steps { bat '"%PY%" --version' }
+        }
+        stage('Install') {
             steps {
-                checkout scm
-                echo 'GitHub source code checked out'
+                bat '"%PY%" -m venv venv'
+                bat 'venv\\Scripts\\python -m pip install -r requirements.txt'
             }
         }
-
-        stage('Check Environment') {
-            steps {
-                bat '''
-                    echo Checking available tools
-                    whoami
-                    cd
-                    git --version || echo git NOT found
-                    java -version || echo java NOT found
-                    python --version || echo python NOT found
-                    where python || echo python NOT on PATH
-                    where docker || echo docker NOT installed
-                    dir
-                '''
-            }
+        stage('Test') {
+            steps { bat 'venv\\Scripts\\python manage.py test' }
         }
     }
 }
